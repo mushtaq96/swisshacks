@@ -4,8 +4,20 @@ import { useWallet } from './context/WalletContext'
 
 export default function Home() {
   const { connect, generateWallet, mintTicket } = useWallet()
+  const [isConnecting, setIsConnecting] = useState(false)
   const [generatedWallet, setGeneratedWallet] = useState(null)
   const [uri, setUri] = useState('')
+  const [isConnected, setIsConnected] = useState(false)
+
+  const handleConnect = async () => {
+    setIsConnecting(true)
+    try {
+      await connect()
+      setIsConnected(true)
+    } finally {
+      setIsConnecting(false)
+    }
+  }
 
   const handleGenerate = async () => {
     const wallet = await generateWallet()
@@ -25,18 +37,30 @@ export default function Home() {
         <section className="p-6 border rounded-lg">
           <h2 className="text-xl font-semibold mb-4">Connection</h2>
           <button
-            onClick={connect}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            onClick={handleConnect}
+            disabled={isConnecting}
+            className={`px-4 py-2 bg-blue-600 text-white rounded 
+              ${isConnecting ? 'animate-pulse cursor-not-allowed' : 'hover:bg-blue-700'} 
+              ${isConnecting ? 'opacity-90' : ''}`}
           >
-            Connect to XRPL
+            {isConnecting ? 'Connecting...' : isConnected ? 'Connected!' : 'Connect to XRPL'}
           </button>
         </section>
+
+        {isConnected && (
+          <section className="p-6 border rounded-lg bg-green-50">
+            <h2 className="text-xl font-semibold mb-4">Connected!</h2>
+            <p className="text-green-600">Successfully connected to XRPL Testnet</p>
+          </section>
+        )}
 
         <section className="p-6 border rounded-lg">
           <h2 className="text-xl font-semibold mb-4">Wallet</h2>
           <button
             onClick={handleGenerate}
-            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mb-4"
+            disabled={!isConnected}
+            className={`px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mb-4
+              ${!isConnected ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             Generate Wallet
           </button>
@@ -61,7 +85,7 @@ export default function Home() {
             />
             <button
               onClick={handleMint}
-              disabled={!generatedWallet || !uri}
+              disabled={!generatedWallet || !uri || !isConnected}
               className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50"
             >
               Mint Ticket
