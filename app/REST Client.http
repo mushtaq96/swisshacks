@@ -1,0 +1,18 @@
+### XRPL Ticketing API
+### Connect to XRPL Testnet
+GET http://localhost:3000/api/connect
+
+
+### Generate Wallet
+POST http://localhost:3000/api/generate-wallet
+
+
+### Mint NFT Ticket
+POST http://localhost:3000/api/mint-ticket
+Content-Type: application/json
+
+{
+  "seed": "sExampleSeed",
+  "uri": "ipfs://example-uri"
+}
+
