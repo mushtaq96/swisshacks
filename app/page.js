@@ -1,98 +1,49 @@
 'use client'
-import { useState } from 'react'
-import { useWallet } from './context/WalletContext'
+
+import Link from 'next/link'
+
+import EventTicket from "./components/event-ticket"
 
 export default function Home() {
-  const { connect, generateWallet, mintTicket } = useWallet()
-  const [isConnecting, setIsConnecting] = useState(false)
-  const [generatedWallet, setGeneratedWallet] = useState(null)
-  const [uri, setUri] = useState('')
-  const [isConnected, setIsConnected] = useState(false)
 
-  const handleConnect = async () => {
-    setIsConnecting(true)
-    try {
-      await connect()
-      setIsConnected(true)
-    } finally {
-      setIsConnecting(false)
+    function events() {
+        let eventsList = []
+        for (let i = 0; i < 10; i++) {
+            eventsList.push(i)
+        }
+        return eventsList
     }
-  }
 
-  const handleGenerate = async () => {
-    const wallet = await generateWallet()
-    setGeneratedWallet(wallet)
-  }
-
-  const handleMint = async () => {
-    if (!generatedWallet?.seed) return
-    await mintTicket(generatedWallet.seed, uri)
-  }
-
-  return (
-    <main className="min-h-screen p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">XRPL Wallet</h1>
-
-      <div className="space-y-6">
-        <section className="p-6 border rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">Connection</h2>
-          <button
-            onClick={handleConnect}
-            disabled={isConnecting}
-            className={`px-4 py-2 bg-blue-600 text-white rounded 
-              ${isConnecting ? 'animate-pulse cursor-not-allowed' : 'hover:bg-blue-700'} 
-              ${isConnecting ? 'opacity-90' : ''}`}
-          >
-            {isConnecting ? 'Connecting...' : isConnected ? 'Connected!' : 'Connect to XRPL'}
-          </button>
-        </section>
-
-        {isConnected && (
-          <section className="p-6 border rounded-lg bg-green-50">
-            <h2 className="text-xl font-semibold mb-4">Connected!</h2>
-            <p className="text-green-600">Successfully connected to XRPL Testnet</p>
-          </section>
-        )}
-
-        <section className="p-6 border rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">Wallet</h2>
-          <button
-            onClick={handleGenerate}
-            disabled={!isConnected}
-            className={`px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mb-4
-              ${!isConnected ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            Generate Wallet
-          </button>
-
-          {generatedWallet && (
-            <div className="mt-4 space-y-2">
-              <p><span className="font-medium">Address:</span> {generatedWallet.address}</p>
-              <p><span className="font-medium">Seed:</span> {generatedWallet.seed}</p>
-            </div>
-          )}
-        </section>
-
-        <section className="p-6 border rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">Mint NFT</h2>
-          <div className="space-y-4">
-            <input
-              type="text"
-              value={uri}
-              onChange={(e) => setUri(e.target.value)}
-              placeholder="Enter URI (e.g., ipfs://...)"
-              className="w-full p-2 border rounded"
-            />
-            <button
-              onClick={handleMint}
-              disabled={!generatedWallet || !uri || !isConnected}
-              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50"
-            >
-              Mint Ticket
-            </button>
-          </div>
-        </section>
-      </div>
-    </main>
-  )
+    return (
+        <>
+            <main className="flex flex-col items-center gap-8">
+                <div className="navbar bg-primary text-primary-content justify-between">
+                    <button className="btn btn-ghost text-xl">Hacklab Marketplace</button>
+                    <Link className="btn" href="/cart">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-shopping-cart"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6 2a1 1 0 0 1 .993 .883l.007 .117v1.068l13.071 .935a1 1 0 0 1 .929 1.024l-.01 .114l-1 7a1 1 0 0 1 -.877 .853l-.113 .006h-12v2h10a3 3 0 1 1 -2.995 3.176l-.005 -.176l.005 -.176c.017 -.288 .074 -.564 .166 -.824h-5.342a3 3 0 1 1 -5.824 1.176l-.005 -.176l.005 -.176a3.002 3.002 0 0 1 1.995 -2.654v-12.17h-1a1 1 0 0 1 -.993 -.883l-.007 -.117a1 1 0 0 1 .883 -.993l.117 -.007h2zm0 16a1 1 0 1 0 0 2a1 1 0 0 0 0 -2zm11 0a1 1 0 1 0 0 2a1 1 0 0 0 0 -2z" /></svg>
+                        Cart
+                    </Link>
+                </div>
+                <label className="input m-4">
+                    <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></g></svg>
+                    <input type="search" required placeholder="Search" />
+                </label>
+                <div className="grid grid-cols-3 gap-4">
+                    {
+                        events().map(i => (
+                            <EventTicket
+                                eventName={"name"}
+                                date={"date"}
+                                time={"time"}
+                                price={100}
+                                imageUrl={"/concert.jpg"}
+                                location={"location"}
+                                key={i}
+                            />
+                        ))
+                    }
+                </div>
+            </main>
+        </>
+    )
 }
