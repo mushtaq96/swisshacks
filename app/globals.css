@@ -1,4 +1,11 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: corporate --default, business --prefersdark;
+  themes: corporate --default;
+}
+@plugin "daisyui/theme" {
+  name: "corporate";
+  default: true;
+  --color-primary: #7813f6;
+  --color-secondary: #8d3cf7;
+  --color-accent: #ffaf6e;
 }

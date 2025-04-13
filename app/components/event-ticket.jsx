@@ -1,8 +1,16 @@
 import { Calendar, Clock, MapPin, Ticket } from "lucide-react"
 
-export default function EventTicket({ eventName, date, time, location, price, imageUrl }) {
+import Link from 'next/link'
+
+export default function EventTicket({ ticket, eventName, date, time, location, price, imageUrl }) {
+
+    function setState() {
+        localStorage.setItem("state", JSON.stringify(ticket))
+    }
+
     return (
-        <div className="card bg-base-100 shadow-xl overflow-hidden">
+        <div className="card bg-base-100 shadow-xl overflow-hidden min-w-[25vw]">
+
             <figure>
                 <img
                     src={imageUrl}
@@ -36,10 +44,12 @@ export default function EventTicket({ eventName, date, time, location, price, im
                 </div>
 
                 <div className="card-actions justify-end mt-4">
-                    <button className="btn btn-primary gap-2">
+
+                    <Link className="btn btn-secodary bg-[#8d3cf7] text-white" href="/cart" onClick={setState}>
                         <Ticket className="h-4 w-4" />
                         Buy Ticket
-                    </button>
+                    </Link>
+
                 </div>
             </div>
 
