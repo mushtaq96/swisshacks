@@ -1,4 +1,5 @@
 import { Calendar, Clock, MapPin, Ticket } from "lucide-react"
+
 import Link from 'next/link'
 
 export default function EventTicket({ ticket, eventName, date, time, location, price, imageUrl }) {
@@ -9,6 +10,7 @@ export default function EventTicket({ ticket, eventName, date, time, location, p
 
     return (
         <div className="card bg-base-100 shadow-xl overflow-hidden min-w-[25vw]">
+
             <figure>
                 <img
                     src={imageUrl}
@@ -42,10 +44,12 @@ export default function EventTicket({ ticket, eventName, date, time, location, p
                 </div>
 
                 <div className="card-actions justify-end mt-4">
+
                     <Link className="btn btn-secodary bg-[#8d3cf7] text-white" href="/cart" onClick={setState}>
                         <Ticket className="h-4 w-4" />
                         Buy Ticket
                     </Link>
+
                 </div>
             </div>
 

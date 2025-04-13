@@ -1,5 +1,6 @@
 'use client'
 
+
 import { useEffect, useState } from "react"
 import EventTicket from "../components/event-ticket"
 
@@ -135,6 +136,7 @@ export default function Cart() {
                         Cart
                     </button>
                 </div>
+
                 <div className="flex items-center gap-20">
                     <EventTicket
                         eventName={state.name}
